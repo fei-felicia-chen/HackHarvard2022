@@ -16,11 +16,11 @@ pygame.display.set_caption('Icy Bird')
 font = pygame.font.SysFont('malgungothic', 60)
 
 ground_scroll = 0
-scroll_speed = 13
+scroll_speed = 4
 flying = False
 game_over = False
 pipe_gap = 220
-pipe_frequency = 1000 # milliseconds
+pipe_frequency = 1500 # milliseconds
 last_pipe = pygame.time.get_ticks() - pipe_frequency
 score = 0
 pass_pipe = False
