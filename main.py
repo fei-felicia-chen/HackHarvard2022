@@ -1,4 +1,5 @@
-import pygame, random
+import pygame
+import random
 from pygame.locals import *
 from bird import *
 from pipe import *
@@ -8,7 +9,7 @@ pygame.init()
 clock = pygame.time.Clock()
 
 screen_width = 764
-screen_height = 736
+screen_height = 936
 
 screen = pygame.display.set_mode((screen_width, screen_height))
 pygame.display.set_caption('Icy Bird')
@@ -19,8 +20,8 @@ ground_scroll = 0
 scroll_speed = 4
 flying = False
 game_over = False
-pipe_gap = 220
-pipe_frequency = 1500 # milliseconds
+pipe_gap = 280
+pipe_frequency = 1500  # milliseconds
 last_pipe = pygame.time.get_ticks() - pipe_frequency
 score = 0
 pass_pipe = False
@@ -40,6 +41,7 @@ def reset_game():
     flappy.rect.y = screen_height // 2
     score = 0
     return score
+
 
 class Button():
     def __init__(self, x, y, image):
@@ -64,6 +66,7 @@ class Button():
 
         return action
 
+
 bird_group = pygame.sprite.Group()
 pipe_group = pygame.sprite.Group()
 
@@ -76,8 +79,8 @@ button = Button(screen_width//2 - 50, screen_height//2 - 100, button_img)
 
 while True:
     clock.tick(75)
-    #draw background
-    screen.blit(bg, (0,0))
+    # draw background
+    screen.blit(bg, (0, 0))
 
     bird_group.draw(screen)
     bird_group.update(flying, game_over)
@@ -89,17 +92,16 @@ while True:
     # check the score
     if len(pipe_group) > 0:
         if bird_group.sprites()[0].rect.left > pipe_group.sprites()[0].rect.left\
-            and bird_group.sprites()[0].rect.right < pipe_group.sprites()[0].rect.right\
-            and not pass_pipe:
+                and bird_group.sprites()[0].rect.right < pipe_group.sprites()[0].rect.right\
+                and not pass_pipe:
             pass_pipe = True
         if pass_pipe:
             if bird_group.sprites()[0].rect.left > pipe_group.sprites()[0].rect.right:
                 score += 1
                 pass_pipe = False
         # decrease pipe gap (increase difficulty) every 10 points
-        if pipe_gap > 180 and score % 10 == 0:           
+        if pipe_gap > 180 and score % 10 == 0:
             pipe_gap -= 10
-
 
     draw_text(str(score), font, (0, 128, 255), int(screen_width / 2), 20)
 
@@ -110,22 +112,23 @@ while True:
         game_over = True
         flying = False
 
-
     if not game_over and flying:
         # generate new pipes
         time_now = pygame.time.get_ticks()
         if time_now - last_pipe > pipe_frequency:
             pipe_height = random.randint(-100, 100)
-            btm_pipe = Pipe(screen_width, int(screen_height / 2) + pipe_height, -1, pipe_gap)
-            top_pipe = Pipe(screen_width, int(screen_height / 2) + pipe_height, 1, pipe_gap)
+            btm_pipe = Pipe(screen_width, int(
+                screen_height / 2) + pipe_height, -1, pipe_gap)
+            top_pipe = Pipe(screen_width, int(
+                screen_height / 2) + pipe_height, 1, pipe_gap)
             pipe_group.add(btm_pipe)
             pipe_group.add(top_pipe)
             last_pipe = time_now
 
-
         # draw and scroll the ground
         ground_scroll -= scroll_speed
-        if abs(ground_scroll) > 35: ground_scroll = 0
+        if abs(ground_scroll) > 35:
+            ground_scroll = 0
 
         pipe_group.update(scroll_speed)
 
